@@ -4,8 +4,10 @@ class Connect {
     public $koneksi;
     public $link;
     public $page;
+    public $baseUrl;
 
     function __construct(){
+        $this->baseUrl = rtrim( str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
         $this->link = $this->parseUrl();
         $this->koneksi = $this->connectDb();
         $this->page = $this->pageSelect($this->link[0]);
@@ -13,10 +15,13 @@ class Connect {
 
     function parseUrl(){
         $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-        if ($uri !== '/' && file_exists(__DIR__ . $uri)) {
-            return false;
+        if ($this->baseUrl !== '' && str_starts_with($uri, $this->baseUrl)) {
+            $uri = substr($uri, strlen($this->baseUrl));
         }
+        
         $url = trim($uri, '/');
+        if($url === '') return [''];
+        
         $url = filter_var($url, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
         return $url;

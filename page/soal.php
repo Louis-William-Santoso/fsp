@@ -2,12 +2,12 @@
 require_once __Dir__.'/../class/Soal.php';
 
 $listSoal = Soal::getData($conn->link[1]);
+var_dump($conn->link[1]);
+if($listSoal) $next = $conn->baseUrl."/soal/".$conn->link[1] + 1;
+else $next = $conn->baseUrl."/kesimpulan"; 
 
-if($listSoal) $next = "/soal/".$conn->link[1] + 1;
-else $next = "/kesimpulan"; 
-
-if($conn->link[1]>1) $back = "/soal/".$conn->link[1] - 1;
-else $back = "/soal/1";
+if($conn->link[1]>1) $back = $conn->baseUrl."/soal/".$conn->link[1] - 1;
+else $back = $conn->baseUrl."/soal/1";
 
 $soal = "";
 foreach ($listSoal as $i) {
@@ -40,13 +40,14 @@ let next = "<?=$next?>";
 
 $('#back').click(function() { 
     window.location.href="<?=$back?>";
+    alert("tess");
 });
 
 if(now < 2) {
     $('#back').attr('hidden',true);
 }
 
-if(next === "/kesimpulan"){
+if(next === "<?= $conn->baseUrl ?>/kesimpulan"){
     $('#soal').html(
         `<h2>Finish Quiz</h2>
         <p>Soal terjawab: tess</p>`

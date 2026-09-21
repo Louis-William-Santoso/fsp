@@ -5,7 +5,7 @@
     Hans Stephen Santoso(160424042)<br>
     Louis William Santoso(160424006)</p>
     <div style="dispaly:flex;">
-        <a style="margin: 0 20px;" href="/soal/1">Mulai Quiz</a>
-        <a style="margin: 0 20px;" href="/edit-soal">Buat/Edit Quiz</a>
+        <a style="margin: 0 20px;" href="soal/1">Mulai Quiz</a>
+        <a style="margin: 0 20px;" href="edit-soal">Buat/Edit Quiz</a>
     </div>
 </div>

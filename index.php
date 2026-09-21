@@ -2,7 +2,7 @@
 require_once __DIR__.'/class/Connect.php';
 session_start();
 $conn = new Connect();
-var_dump($conn->link);
+// var_dump($conn->link);
 ?>
 <!DOCTYPE html>
 <html lang="en">
