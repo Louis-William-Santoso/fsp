@@ -10,7 +10,7 @@ $conn = new Connect();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tugas FSP</title>
-    <script src="/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"></script>
 </head>
 <body>
    <?php include $conn->page ?>
