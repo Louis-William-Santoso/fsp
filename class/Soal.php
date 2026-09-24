@@ -24,5 +24,21 @@ class Soal{
         if(empty($data)) return false;
         return $data;
     }
+    public static function getAllSoal() {
+        $conn = new Connect();
+        $stmt = $conn->koneksi->prepare("SELECT * FROM soal ORDER BY nomor asc");
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $data = [];
+        
+        while($row = $res->fetch_assoc()){
+            $data[] = [
+                'idSoal' => $row['idsoal'],
+                'nomor' => $row['nomor'],
+                'pertanyaan' => $row['pertanyaan']
+            ];
+        }
+        return $data;
+    }
 
 }

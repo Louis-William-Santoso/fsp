@@ -1,8 +1,14 @@
 <?php
 require_once __Dir__.'/../class/Soal.php';
 
+if (isset($_POST['jawaban'])) {
+    foreach ($_POST['jawaban'] as $idSoal => $idJwb) {
+        $_SESSION['jawaban'][$idSoal] = $idJwb;
+    }
+}
+
 $listSoal = Soal::getData($conn->link[1]);
-var_dump($conn->link[1]);
+//var_dump($conn->link[1]);
 if($listSoal) $next = $conn->baseUrl."/soal/".$conn->link[1] + 1;
 else $next = $conn->baseUrl."/kesimpulan"; 
 
@@ -10,20 +16,29 @@ if($conn->link[1]>1) $back = $conn->baseUrl."/soal/".$conn->link[1] - 1;
 else $back = $conn->baseUrl."/soal/1";
 
 $soal = "";
-foreach ($listSoal as $i) {
-    $jawab = "";
-    foreach($i['jawaban'] as $j){
-        $jawab .= "<input type='radio' id='radio{$j['id']}' name='{$j['idSoal']}' value='{$j['benar']}'>
-                <label for='radio{$j['id']}'>{$j['jawab']}</label><br>";
+if ($listSoal) { 
+    foreach ($listSoal as $i) {
+        $jawab = "";
+        
+        $arrJawab = $i['jawaban'];
+        shuffle($arrJawab); // Acak urutan jawaban
+
+        foreach($arrJawab as $j){
+            // Tandai checked jika jawaban sudah ada di session
+            $checked = (isset($_SESSION['jawaban'][$j['idSoal']]) && $_SESSION['jawaban'][$j['idSoal']] == $j['id']) ? "checked" : "";
+            
+            $jawab .= "<input type='radio' id='radio{$j['id']}' name='jawaban[{$j['idSoal']}]' value='{$j['id']}' $checked>
+                    <label for='radio{$j['id']}'>{$j['jawab']}</label><br>";
+        }
+        $soal .= "<h3>{$i['nomor']}){$i['pertanyaan']}</h3> $jawab";
     }
-    $soal .= "<h3>{$i['nomor']}){$i['pertanyaan']}</h3> $jawab";
 }
 ?>
 <header>
     <h1>Quiz</h1>
     <p id="halaman">Halaman-<?=$conn->link[1]?></p>
 
-    <form action="<?=$next?>">
+    <form method="POST" action="<?=$next?>">
         <div id="soal">
             <?=$soal?>
         </div>
@@ -39,8 +54,8 @@ let now = <?=$conn->link[1]?>;
 let next = "<?=$next?>";
 
 $('#back').click(function() { 
-    window.location.href="<?=$back?>";
-    alert("tess");
+    $('form').attr('action', "<?=$back?>");
+    $('form').submit();
 });
 
 if(now < 2) {
