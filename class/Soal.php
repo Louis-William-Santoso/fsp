@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/Connect.php';
 require_once __DIR__.'/Jawaban.php';
+
 class Soal{
     public static function getData($halaman){
         $conn = new Connect();
@@ -13,6 +14,14 @@ class Soal{
         
         while($row = $res->fetch_assoc()){
             $jawab = Jawaban::getData($row['idsoal']);
+            $jumlah_opsi = count($jawab);
+            for($i = 0; $i < $jumlah_opsi; $i++) {
+                $acak = rand(0, $jumlah_opsi - 1);
+                $temp = $jawab[$i];
+                $jawab[$i] = $jawab[$acak];
+                $jawab[$acak] = $temp;
+            }
+            
             $data[] = [
                 'nomor' => $row ['nomor'],
                 'pertanyaan' => $row['pertanyaan'],
@@ -24,6 +33,7 @@ class Soal{
         if(empty($data)) return false;
         return $data;
     }
+
     public static function getAllSoal() {
         $conn = new Connect();
         $stmt = $conn->koneksi->prepare("SELECT * FROM soal ORDER BY nomor asc");
@@ -40,5 +50,5 @@ class Soal{
         }
         return $data;
     }
-
 }
+?>

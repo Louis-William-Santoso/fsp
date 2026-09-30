@@ -1,16 +1,8 @@
 <?php
 require_once __DIR__ . '/../class/Soal.php';
 require_once __DIR__ . '/../class/Jawaban.php';
-
-if (isset($_POST['jawaban'])) {
-    foreach ($_POST['jawaban'] as $idSoal => $idJwb) {
-        $_SESSION['jawaban'][$idSoal] = $idJwb;
-    }
-}
-
-
 if (isset($_POST['play_again'])) {
-    unset($_SESSION['jawaban']);
+    unset($_SESSION['jawaban_user']);
     
     global $conn; 
     header("Location: " . $conn->baseUrl . "/soal/1");
@@ -19,52 +11,57 @@ if (isset($_POST['play_again'])) {
 
 $skor_akhir = 0;
 $semuaSoal = Soal::getAllSoal();
-$list_html = "<ol>";
+$list_html = "";
 
 if ($semuaSoal) {
     foreach ($semuaSoal as $soal) {
         $idsoal = $soal['idSoal'];
+        $nomor = $soal['nomor'];
         $pertanyaan = $soal['pertanyaan'];
 
-        $list_html .= "<li>$pertanyaan<br>";
+        $list_html .= "<p>Pertanyaan nomor {$nomor} : {$pertanyaan}<br>";
 
-        // Pengecekan jawaban user
-        if (isset($_SESSION['jawaban'][$idsoal])) {
-            $idjawaban_user = $_SESSION['jawaban'][$idsoal];
-            $detailJawabanUser = Jawaban::getDetailJawaban($idjawaban_user);
-            $teks_jawaban_user = $detailJawabanUser['isi_jawaban'];
+        $pilihanJawaban = Jawaban::getData($idsoal);
+        
+        $teks_jawaban_user = "Kosong / Tidak dijawab";
+        $teks_jawaban_benar = "";
+        $status_benar = false;
 
-            if ($detailJawabanUser['benarkah'] == 1) {
-                $skor_akhir += 10;
-                $list_html .= "Jawaban user : $teks_jawaban_user (benar)</li>";
-            } else {
-                $jawaban_benar = Jawaban::getJawabanBenar($idsoal);
-                $list_html .= "Jawaban user : $teks_jawaban_user (salah)<br>";
-                $list_html .= "Jawaban benar : $jawaban_benar</li>";
+        foreach ($pilihanJawaban as $pj) {
+            if ($pj['benar'] == 1) {
+                $teks_jawaban_benar = $pj['jawab'];
             }
+            if (isset($_SESSION['jawaban_user'][$idsoal]) && $_SESSION['jawaban_user'][$idsoal] == $pj['id']) {
+                $teks_jawaban_user = $pj['jawab'];
+                if ($pj['benar'] == 1) {
+                    $status_benar = true;
+                }
+            }
+        }
+        if ($status_benar) {
+            $skor_akhir += 10;
+            $list_html .= "Jawaban user : {$teks_jawaban_user} (benar)</p>";
         } else {
-            // Jika tidak dijawab
-            $jawaban_benar = Jawaban::getJawabanBenar($idsoal);
-            $list_html .= "Jawaban user : Kosong (salah)<br>";
-            $list_html .= "Jawaban benar : $jawaban_benar</li>";
+            $list_html .= "Jawaban user : {$teks_jawaban_user} (salah)<br>";
+            $list_html .= "Jawaban benar : {$teks_jawaban_benar}</p>";
         }
     }
 }
-$list_html .= "</ol>";
 ?>
 
-<h2>Halaman Kesimpulan</h2>
-<p>Menampilkan semua soal, dan jawaban user, beserta skor akhirnya.<br>
-Anggap saja satu nomor benar bernilai 10</p>
+<div style="padding: 20px;">
+    <h2>Halaman Kesimpulan</h2>
+    <p>Menampilkan semua soal, dan jawaban user, beserta skor akhirnya.<br>
+    Anggap saja satu nomor benar bernilai 10</p>
+    <div style="margin-bottom: 30px;">
+        <?=$list_html?>
+    </div>
 
-<!-- Menampilkan list pertanyaan dan jawaban[cite: 6] -->
-<?=$list_html?>
+    <!-- Menampilkan Skor Akhir -->
+    <h3 style="margin-bottom: 20px;">Skor Akhir : <?=$skor_akhir?></h3>
 
-<!-- Menampilkan Skor Akhir di bawah list[cite: 6] -->
-<p style="margin-left: 40px;">Skor Akhir : <?=$skor_akhir?></p>
-
-<br>
-<p>Kemudian ada satu tombol lagi:</p>
-<form method="post" action="">
-    <input type="submit" name="play_again" value="PLAY AGAIN">
-</form>
+    <!-- Tombol Play Again -->
+    <form method="post" action="">
+        <input type="submit" name="play_again" value="PLAY AGAIN" style="padding: 10px 20px; font-weight: bold; cursor: pointer;">
+    </form>
+</div>
