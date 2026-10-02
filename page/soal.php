@@ -63,13 +63,11 @@
             <div id="soal">
                 <?= $soal ?>
             </div>
-            
-            <div style="display:flex;">
+            <div class="nav-group">
                 <?php if ($halaman_sekarang > 1): ?>
-                    <button style="margin: 5px 20px;" type="submit" name="nav" value="back"><< Back</button>
+                    <button type="submit" name="nav" value="back">&lt;&lt; Back</button>
                 <?php endif; ?>
-                
-                <button style="margin: 5px 20px;" type="submit" name="nav" value="next">Next >></button>
+                <button type="submit" name="nav" value="next">Next &gt;&gt;</button>
             </div>
         </form>
     </header>

@@ -12,72 +12,93 @@ $conn = new Connect();
     <title>Tugas FSP</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"></script>
     <style>
+        :root {
+            --bg: #faf9f6;
+            --ink: #1a1a1a;
+            --muted: #666;
+            --accent: #c0392b;
+            --border: #ddd;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 90vh;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.6;
+            padding: 40px 20px;
         }
         div, header {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            width: 100%;
             max-width: 650px;
-            box-sizing: border-box;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 30px;
         }
-
         h1, h2 {
-            color: #2c3e50;
-            margin-top: 0;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            margin-bottom: 16px;
         }
-
         h3 {
-            color: #34495e;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 1rem;
+            margin: 20px 0 8px;
+            color: var(--ink);
         }
+        p { margin-bottom: 12px; }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a:hover { text-decoration: underline; }
         input[type="radio"] {
             margin-right: 8px;
-            cursor: pointer;
+            vertical-align: middle;
         }
-
         label {
+            display: inline-block;
+            padding: 4px 0;
             cursor: pointer;
-            line-height: 1.8;
         }
         button, input[type="submit"] {
-            background-color: #3498db;
-            color: white;
-            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
             padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 5px;
+            border: 1px solid var(--ink);
+            background: var(--ink);
+            color: #fff;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            margin: 10px 10px 0 0;
         }
-
         button:hover, input[type="submit"]:hover {
-            background-color: #2980b9;
+            background: var(--accent);
+            border-color: var(--accent);
         }
-        #soal p, #soal h3 {
-            margin-bottom: 15px;
+        #halaman {
+            font-family: 'Courier New', monospace;
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
         }
-        a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: bold;
+        .skor {
+            font-family: 'Courier New', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            border-top: 2px solid var(--ink);
+            padding-top: 16px;
+            margin-top: 20px;
         }
-
-        a:hover {
-            text-decoration: underline;
+        .nav-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
         }
     </style>
 </head>
